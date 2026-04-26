@@ -38,7 +38,7 @@ $Config = @{
 # ============================================
 # 日志函数
 # ============================================
-$Host.UI.RawUI.ForegroundColor = $null
+try { $Host.UI.RawUI.ForegroundColor = 'White' } catch {}
 
 function Write-Info   { Write-Host "   $($args[0])" -ForegroundColor Cyan }
 function Write-Ok     { Write-Host " [OK] $($args[0])" -ForegroundColor Green }
