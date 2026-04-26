@@ -14,7 +14,8 @@ $ErrorActionPreference = 'Stop'
     NodeMsiUrl                      = 'https://nodejs.org/dist/v22.16.0/node-v22.16.0-x64.msi'
 
     # ---- OpenClaw ----
-    OpenClawPackageVersion          = 'openclaw@3.1.13'
+    # 'latest' 表示安装最新稳定版（推荐新手）
+    OpenClawPackageVersion          = 'openclaw@latest'
     CommandTimeoutSeconds           = 120
 
     # ---- npm registries（主源失败自动回退） ----
