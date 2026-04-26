@@ -598,6 +598,53 @@ function Show-Summary {
 }
 
 # ============================================
+# 卸载功能
+# ============================================
+function Uninstall-All {
+    Write-Step "卸载 OpenClaw"
+
+    Write-Warn "即将执行以下操作："
+    Write-Warn "  1. 停止并卸载 Gateway 服务"
+    Write-Warn "  2. 卸载 npm 全局 openclaw 包"
+    Write-Info ""
+
+    $confirm = Read-Host "确认卸载？输入 yes 继续"
+    if ($confirm -ne 'yes') {
+        Write-Info "已取消"
+        exit 0
+    }
+
+    # 停止服务
+    if (Test-Command openclaw) {
+        Write-Info "停止 Gateway 服务..."
+        & openclaw gateway stop 2>$null | Out-Null
+        Write-Info "卸载 Gateway 服务..."
+        & openclaw gateway uninstall 2>$null | Out-Null
+        Write-Ok "Gateway 已停止并卸载"
+    } else {
+        Write-Warn "未检测到 openclaw 命令，跳过服务卸载"
+    }
+
+    # 卸载 npm 包
+    if (Test-Command npm) {
+        Write-Info "卸载 openclaw npm 包..."
+        & npm uninstall -g openclaw 2>&1 | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Ok "openclaw npm 包已卸载"
+        } else {
+            Write-Warn "npm 卸载返回非零退出码，请检查"
+        }
+    } else {
+        Write-Warn "未检测到 npm，跳过包卸载"
+    }
+
+    Write-Info ""
+    Write-Ok "卸载完成！"
+    Write-Info "如果你还想卸载 Node.js，请在 Windows 控制面板 - 程序和功能 中手动操作。"
+    Write-Info "工作区文件保留在：$env:USERPROFILE\.openclaw"
+    exit 0
+}
+# ============================================
 # 主流程
 # ============================================
 function Main {
@@ -645,4 +692,58 @@ function Main {
     Show-Summary -Workspace $workspace -Port $finalPort
 }
 
-Main
+# ============================================
+# 入口
+# ============================================
+param(
+    [switch]$Uninstall,
+    [switch]$Help
+)
+
+if ($Help) {
+    Write-Host "用法："
+    Write-Host "  双击 quick-start.bat           全新安装/重装"
+    Write-Host "  powershell .\scripts\quick-start.ps1 -Uninstall  完全卸载"
+    exit 0
+}
+
+if ($Uninstall) {
+    Uninstall-All
+} else {
+    # 检测已有安装，询问分支
+    if (Test-Command openclaw) {
+        Write-Host "===========================================" -ForegroundColor DarkGray
+        Write-Host " OpenClaw 快速部署向导" -ForegroundColor White
+        Write-Host "===========================================" -ForegroundColor DarkGray
+        Write-Host ""
+        Write-Info "检测到 OpenClaw 已安装！"
+        $rawVer = Try { & openclaw --version 2>$null } Catch { '未知' }
+        Write-Info "当前版本：$rawVer"
+        Write-Info ""
+        Write-Info "[1] 重新安装（保留配置，覆盖安装）"
+        Write-Info "[2] 仅更新到最新版"
+        Write-Info "[3] 跳过安装，直接启动"
+        Write-Info "[4] 完全卸载"
+        Write-Info ""
+        $choice = Read-Host "请选择 (1/2/3/4)"
+        switch ($choice) {
+            '2' {
+                $ok = Invoke-NpmWithFallback -Arguments @('update', '-g', $Config.OpenClawPackageVersion)
+                if (-not $ok) { Write-Err "更新失败" }
+                else { Write-Ok "已更新" }
+            }
+            '3' {
+                Write-Ok "跳过安装"
+            }
+            '4' {
+                Uninstall-All
+            }
+            default {
+                Write-Info "执行全新安装..."
+                Main
+            }
+        }
+    } else {
+        Main
+    }
+}
