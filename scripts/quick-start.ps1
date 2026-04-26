@@ -288,11 +288,28 @@ function Ensure-Node {
         }
     }
 
-    # 确保 npm 可用
+    # 确保 npm 可用且功能正常
     if (-not (Test-Command npm)) {
         Exit-WithError -Step '检查 npm' -Hint 'Node.js 安装不完整，npm 不可用。请手动安装 Node.js 后重试。'
     }
-    Write-Ok "npm 可用"
+
+    # npm 功能性验证（检测路径挂断、nvm 切换残留等）
+    $npmCmd = (Get-Command npm).Source
+    $npmVersion = $null
+    try {
+        $npmVersion = & npm --version 2>$null
+    } catch {}
+
+    if (-not $npmVersion) {
+        if ($npmCmd -match 'nvm') {
+            Exit-WithError -Step '检查 npm' `
+                -Hint "检测到 nvm 管理 Node.js。nvm 切换版本后可能导致 npm 全局链接失效，请重新运行本脚本或重启终端后重试。"
+        } else {
+            Exit-WithError -Step '检查 npm' `
+                -Hint "npm 命令存在但无法执行（$npmCmd）。可能是 PATH 环境变量问题，请重启终端后重试。"
+        }
+    }
+    Write-Ok "npm 可用（版本：$npmVersion）"
 }
 
 # ============================================
