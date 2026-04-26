@@ -11,6 +11,12 @@
 #>
 
 #Requires -Version 5.1
+param(
+    [switch]$Uninstall,
+    [switch]$Help
+)
+
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
@@ -695,11 +701,6 @@ function Main {
 # ============================================
 # 入口
 # ============================================
-param(
-    [switch]$Uninstall,
-    [switch]$Help
-)
-
 if ($Help) {
     Write-Host "用法："
     Write-Host "  双击 quick-start.bat           全新安装/重装"
