@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     OpenClaw 快速部署向导 — Windows 中文新手安装器
 .DESCRIPTION
@@ -249,8 +249,8 @@ function Ensure-Node {
 
         # 刷新 PATH（合并 machine + user path）
         try {
-            $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine') ?? ''
-            $userPath    = [Environment]::GetEnvironmentVariable('Path', 'User') ?? ''
+            $machinePath = [Environment]::GetEnvironmentVariable('Path', 'Machine'); if (-not $machinePath) { $machinePath = '' }
+            $userPath    = [Environment]::GetEnvironmentVariable('Path', 'User'); if (-not $userPath) { $userPath = '' }
             $env:Path = "$machinePath;$userPath"
         } catch {
             Write-Warn "无法自动刷新 PATH，请手动重启终端后重新运行"
