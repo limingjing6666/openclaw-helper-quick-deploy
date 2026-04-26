@@ -1,5 +1,5 @@
 @echo off
-chcp 65001 >nul
+chcp 936 >nul
 color 0B
 title OpenClaw 快速部署向导
 REM ================================================
@@ -14,19 +14,19 @@ set NODE_URL=https://nodejs.org/dist/v22.13.0/node-v22.13.0-x64.msi
 
 cls
 echo.
-echo ╔═══════════════════════════════════════════╗
-echo ║        ^>^> OpenClaw 快速部署向导          ║
-echo ║     让不懂技术的小白也能跑起 AI 机器人   ║
-echo ╚═══════════════════════════════════════════╝
+echo ===========================================
+echo          OpenClaw 快速部署向导
+echo       让不懂技术的小白也能跑起 AI 机器人
+echo ===========================================
 echo.
 echo 本向导将一步步帮你完成：
 echo.
-echo  ① 检查/安装 Node.js
-echo  ② 安装 OpenClaw（AI 机器人运行环境）
-echo  ③ 配置 DeepSeek API Key（AI 大脑）
-echo  ④ 配置 QQ 机器人（让你在 QQ 上聊天）
-echo  ⑤ 运行官方配置向导
-echo  ⑥ 启动你的 AI 机器人
+echo  1. 检查/安装 Node.js
+echo  2. 安装 OpenClaw（AI 机器人运行环境）
+echo  3. 配置 DeepSeek API Key（AI 大脑）
+echo  4. 配置 QQ 机器人（让你在 QQ 上聊天）
+echo  5. 运行官方配置向导
+echo  6. 启动你的 AI 机器人
 echo.
 echo 按任意键开始部署，按 Ctrl+C 退出...
 pause >nul
@@ -36,9 +36,9 @@ REM ================================================
 :step1
 cls
 echo.
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo   第一步：检查 Node.js
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo.
 
 where node >nul 2>nul
@@ -105,9 +105,9 @@ REM ================================================
 :step2
 cls
 echo.
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo   第二步：安装 OpenClaw
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo.
 echo OpenClaw 是 AI 机器人运行的核心程序。
 echo.
@@ -125,17 +125,17 @@ if %ERRORLEVEL% neq 0 (
         echo.
         echo [X] 安装失败！常见原因：
         echo.
-        echo  ① 网络问题
+        echo  1. 网络问题
         echo     如果你在用代理，试试在命令提示符输入：
         echo       set HTTPS_PROXY=http://127.0.0.1:你的代理端口
         echo       npm install -g openclaw
         echo.
-        echo  ② 镜像源不可用
+        echo  2. 镜像源不可用
         echo     可以换回官方源后重试：
         echo       npm config set registry https://registry.npmjs.org
         echo       npm install -g openclaw
         echo.
-        echo  ③ 磁盘空间不足
+        echo  3. 磁盘空间不足
         echo.
         pause
         goto step2
@@ -168,21 +168,21 @@ REM ================================================
 :step3
 cls
 echo.
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo   第三步：配置 AI 大脑（DeepSeek API Key）
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo.
 echo DeepSeek 是 AI 机器人的"大脑"，让机器人能理解你说的话。
 echo 注册即送 500 万 tokens，正常聊天可以用很久很久～
 echo.
 echo 获取方法（超级简单，2 分钟搞定）：
 echo.
-echo  ① 打开浏览器访问 https://platform.deepseek.com/
-echo  ② 点击右上角「登录/注册」
+echo  1. 打开浏览器访问 https://platform.deepseek.com/
+echo  2. 点击右上角「登录/注册」
 echo     - 手机号就能注册，也可以用邮箱
-echo  ③ 登录后点击左侧菜单「API Keys」
-echo  ④ 点击「创建 API Key」
-echo  ⑤ 复制那一串以 sk- 开头的密钥
+echo  3. 登录后点击左侧菜单「API Keys」
+echo  4. 点击「创建 API Key」
+echo  5. 复制那一串以 sk- 开头的密钥
 echo.
 echo [!]  密钥长这样：sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 echo.
@@ -209,9 +209,9 @@ REM ================================================
 :step4
 cls
 echo.
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo   第四步：配置 QQ 机器人
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo.
 echo 想让你的 AI 机器人上 QQ 和你聊天吗？
 echo.
@@ -231,17 +231,17 @@ if /i "%QQ_CHOICE%"=="S" (
 echo.
 echo 配置 QQ 机器人需要两个东西：
 echo.
-echo   ① AppID（应用 ID）—— 一串数字
-echo   ② ClientSecret（客户端密钥）—— 一串字母数字
+echo   1. AppID（应用 ID）—— 一串数字
+echo   2. ClientSecret（客户端密钥）—— 一串字母数字
 echo.
 echo 获取方法（约 5 分钟）：
 echo.
-echo  ① 打开浏览器访问 https://q.qq.com/
-echo  ② 点击右上角「登录」
+echo  1. 打开浏览器访问 https://q.qq.com/
+echo  2. 点击右上角「登录」
 echo     - 用你的 QQ 号扫码登录
-echo  ③ 登录后点击「创建机器人」→「机器人」
-echo  ④ 填一个名字和简介（随便写就行）
-echo  ⑤ 创建成功后，在「开发配置」页面找到：
+echo  3. 登录后点击「创建机器人」→「机器人」
+echo  4. 填一个名字和简介（随便写就行）
+echo  5. 创建成功后，在「开发配置」页面找到：
 echo     - AppID（一串数字，比如 1234567890）
 echo     - ClientSecret（一串字母数字）
 echo.
@@ -274,9 +274,9 @@ REM ================================================
 :step5
 cls
 echo.
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo   第五步：运行官方配置向导
-echo ═══════════════════════════════════════════
+echo ==========================================
 echo.
 echo 接下来会启动 OpenClaw 的官方配置向导。
 echo.
@@ -382,17 +382,17 @@ echo.
 openclaw gateway start
 
 echo.
-echo ╔═══════════════════════════════════════════╗
-echo ║        !! 恭喜！部署完成！               ║
-echo ║                                           ║
-echo ║  你的 AI 机器人已经启动！                 ║
-echo ║  去 QQ 上给你的机器人发消息试试吧！       ║
-echo ║                                           ║
-echo ║  下一步：                                 ║
-echo ║   - 编辑 prompts/ 里的文件               ║
-echo ║     可以定制机器人的性格和说话方式       ║
-echo ║                                           ║
-echo ║  [?] 遇到问题？看 docs/05-troubleshooting.md ║
-echo ╚═══════════════════════════════════════════╝
+echo ===========================================
+echo           !! 恭喜！部署完成！
+echo.
+echo     你的 AI 机器人已经启动！
+echo     去 QQ 上给你的机器人发消息试试吧！
+echo.
+echo     下一步：
+echo      - 编辑 prompts/ 里的文件
+echo        可以定制机器人的性格和说话方式
+echo.
+echo     [?] 遇到问题？看 docs/05-troubleshooting.md
+echo ===========================================
 echo.
 pause
