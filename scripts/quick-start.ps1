@@ -310,6 +310,37 @@ function Ensure-Node {
         }
     }
     Write-Ok "npm 可用（版本：$npmVersion）"
+
+    # npm 全局安装功能验证（拦截 nvm 切换残留导致 .cmd shim 断裂）
+    Write-Info "验证 npm 全局安装功能..."
+    $npmOk = $false
+    try {
+        # 用 npm ls -g 检测全局目录是否正常（不产生副作用）
+        $null = & npm ls -g --depth=0 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            $npmOk = $true
+        }
+    } catch {}
+
+    if (-not $npmOk) {
+        # 尝试修复：重建 npm 缓存 + 修复全局前缀
+        Write-Warn "npm 全局目录可能存在残留链接，尝试自动修复..."
+        try {
+            & npm cache clean --force 2>$null | Out-Null
+            & npm install -g npm 2>&1 | Out-Null
+            if ($LASTEXITCODE -eq 0) {
+                Write-Ok "npm 已自动修复"
+            } else {
+                throw
+            }
+        } catch {
+            $npmRoot = npm root -g 2>$null
+            Exit-WithError -Step '检查 npm' `
+                -Hint "npm 全局目录存在残留链接或损坏文件（$npmRoot）。建议：打开新终端，执行 'npm install -g npm' 修复，或删除全局 node_modules 目录后重试。如果使用 nvm，请先执行 'nvm use $(node -v)' 确保链接正确。"
+        }
+    } else {
+        Write-Ok "npm 全局安装功能正常"
+    }
 }
 
 # ============================================
